@@ -1,0 +1,18 @@
+version: "4"
+services:
+  mysql-db:
+    image: mysql
+    container_name: mysql-db-productMicroservice
+    environment:
+      #Username is not required for the root user
+#     #only the root password simple passowrd is for additional users to the database
+      MYSQL_ROOT_PASSWORD: "Mustafa715"
+      MYSQL_DATABASE: "mysqlDatabase"
+    ports:
+      - "3307:3306"
+#The ports property always takes a list of strings so the reason for hte -
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    restart: always
+
+
