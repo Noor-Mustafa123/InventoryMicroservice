@@ -12,7 +12,7 @@ services:
       - "3307:3306"
 #The ports property always takes a list of strings so the reason for hte -
     volumes:
-      - ./data/mysql:/var/lib/mysql
+      - ./data/mysql1:/var/lib/mysql
     restart: always
 
 
