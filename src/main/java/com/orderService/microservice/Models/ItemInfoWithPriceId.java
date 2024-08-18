@@ -1,5 +1,6 @@
 package com.orderService.microservice.Models;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,16 +12,18 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 @Setter
 @Component
-public class ItemInfo {
+public class ItemInfoWithPriceId {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        public Integer id;
-        private String productName;
-        private String productDesc;
-        private int productQuantity;
-        private long productPrice;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer id;
+    public String productName;
+    public String productDesc;
+    public int productQuantity;
+    public long productPrice;
+    public String productId;
 
 }

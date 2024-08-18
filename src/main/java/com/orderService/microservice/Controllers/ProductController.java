@@ -1,8 +1,12 @@
 package com.orderService.microservice.Controllers;
 
 
+import com.orderService.microservice.DTO.ProductIdDTO;
 import com.orderService.microservice.Models.ItemInfo;
+import com.orderService.microservice.DTO.ProductQuantity;
+import com.orderService.microservice.Models.ItemInfoWithPriceId;
 import com.orderService.microservice.Repository.ProductRepository;
+import com.orderService.microservice.Services.StripeService;
 import com.stripe.param.ProductCreateParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +38,8 @@ public class ProductController {
     @Autowired
     public ProductRepository productRepository;
 
+    @Autowired
+    public StripeService stripeService;
 
 
     @PostMapping("/AddProduct")
@@ -64,7 +70,17 @@ public class ProductController {
             productResponse.setDescription(productObj.getDescription());
             productResponse.setPriceId(price.getId());
 
-            productRepository.save(itemInfo);
+
+          ItemInfoWithPriceId itemInfoWithPriceIdObj =  ItemInfoWithPriceId.builder()
+                    .productName(itemInfo.getProductName())
+                    .productQuantity(itemInfo.getProductQuantity())
+                    .productDesc(itemInfo.getProductDesc())
+                    .productPrice(itemInfo.getProductPrice())
+                    .productId(price.getId())
+                    .build();
+
+
+            productRepository.save(itemInfoWithPriceIdObj);
 
             return ResponseEntity.ok(productResponse);
 
@@ -75,5 +91,23 @@ public class ProductController {
     }
 
 
+// *   create functionality to add product quantity
+
+
+//  *  create api to check the inventory of the product by price id
+
+    @RequestMapping("/Stock")
+    public ResponseEntity<ProductQuantity> checkProductStock(@RequestBody ProductIdDTO productIdDTO) {
+
+          ProductQuantity productResponse = stripeService.productInventoryChecker(productIdDTO);
+
+          if(productResponse.getError() != null){
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(productResponse);
+          }
+          else{
+              return ResponseEntity.status(HttpStatus.OK).body(productResponse);
+          }
+
+    }
 
 }

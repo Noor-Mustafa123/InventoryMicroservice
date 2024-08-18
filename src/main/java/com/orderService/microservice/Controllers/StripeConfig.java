@@ -13,9 +13,13 @@ public class StripeConfig {
     @Value("${stripe.api.key}")
     private String stripeApiKey;
 
+
+
+    //    the configuration classes can have initialization method too
     @PostConstruct
     public void init() {
         Stripe.apiKey = stripeApiKey;
     }
+
 
 }
