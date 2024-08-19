@@ -44,6 +44,14 @@ public class ProductController {
 
     @PostMapping("/AddProduct")
     public ResponseEntity<ProductResponse> addNewProduct(@RequestBody ItemInfo itemInfo) {
+
+
+      boolean booleanValue =  stripeService.ifDuplicateAddToTotal(itemInfo);
+
+            if(booleanValue){
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ProductResponse(null,null,null,null,"There is a duplicate product already in the database and the quantity of the product has been updated"));
+            }
+
         try {
 
             stripeConfig.init();
@@ -88,15 +96,19 @@ public class ProductController {
             logger.error("An error occurred: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+
+
+
+
+
+
+
     }
 
 
-// *   create functionality to add product quantity
 
 
-//  *  create api to check the inventory of the product by price id
-
-    @RequestMapping("/Stock")
+    @PostMapping("/Stock")
     public ResponseEntity<ProductQuantity> checkProductStock(@RequestBody ProductIdDTO productIdDTO) {
 
           ProductQuantity productResponse = stripeService.productInventoryChecker(productIdDTO);
@@ -107,6 +119,7 @@ public class ProductController {
           else{
               return ResponseEntity.status(HttpStatus.OK).body(productResponse);
           }
+
 
     }
 

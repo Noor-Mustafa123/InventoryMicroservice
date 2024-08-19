@@ -13,6 +13,8 @@ public class ProductIdDTO {
 
     public String productId;
 
+    public long productQuantity;
+
     public String productName;
 
 }
